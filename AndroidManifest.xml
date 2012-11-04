@@ -19,8 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="CSearchLay"></activity>
         <activity android:name="cabout"></activity>
+        <activity android:name="CSearch"></activity>
         
     </application>
 

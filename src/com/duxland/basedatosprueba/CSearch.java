@@ -13,14 +13,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class CSearch extends Activity implements OnClickListener 
 {
 	GlobalClass global;
 	Button btnSearch;
-
+	EditText textSearch;
 	ListView listView;
 	String TablaUsada;
 	Boolean ObjSearch=false;
@@ -32,6 +34,7 @@ public class CSearch extends Activity implements OnClickListener
 		listView = (ListView) findViewById(R.id.listsearch);
 		btnSearch=(Button) findViewById(R.id.BtnSearch);
 		btnSearch.setOnClickListener(this);
+		textSearch=(EditText)findViewById(R.id.EditSearch);
 		Rellenar("");
 	}
 	/** Called when the activity is first created. */
@@ -90,9 +93,9 @@ public class CSearch extends Activity implements OnClickListener
     	dobj=objetos.getList(" Padre="+_idPadre);
     	for(CDatos d:dobj)
     	{
-    		if(d.getValorCampo("TipoObj")=="CS")
+    		if(d.getValorCampo("TipoObj").equals("CS"))
     			rtn.add(d.getValorCampo("Nombre"));
-    		else if(d.getValorCampo("Mostrar")=="S")
+    		if(d.getValorCampo("Mostrar").equals("S"))
     			CampoMostrar=d.getValorCampo("Nombre");
     	}    	
     	if(rtn.size()>0)
@@ -111,9 +114,20 @@ public class CSearch extends Activity implements OnClickListener
     	if(Filtro!="")
     		where=GeneraWhere(Filtro);    	    	
     	tmp=Datos.getArrayDatos(CampoMostrar,where);
-    	 
-    	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, (String[]) tmp.toArray());    
-    	listView.setAdapter(adapter);    	
+    	if(tmp.size()>0)
+    	{
+	    	String[] array=new String[tmp.size()];
+	    	for(int i=0;i<tmp.size();i++)
+	    		array[i]=tmp.get(i);
+	    		
+	    	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,array);    
+	    	listView.setAdapter(adapter);
+    	}
+    	else
+    	{
+    		Toast toast1 = Toast.makeText(getApplicationContext(),"No se ha encontrado ningun resultado", Toast.LENGTH_SHORT);
+    	    toast1.show();	
+    	}
     }
     private String GeneraWhere(String Filtro)
     {
@@ -130,7 +144,7 @@ public class CSearch extends Activity implements OnClickListener
 			{
 				where+=" OR ";    			
 			}    		
-			where+=s+" like '%"+Filtro+"%'";
+			where+=" ( " + s+" like '%"+Filtro+"%' OR " + s+" like '"+Filtro+"%' OR " + s+" like '%"+Filtro+"' ) "  ;
 		}
 		where+=")";
     	return where;
@@ -139,7 +153,8 @@ public class CSearch extends Activity implements OnClickListener
 	{
 		if(v==btnSearch)
 		{
-			
+			String text=textSearch.getText().toString();
+			Rellenar(text);			
 		}
 		// TODO Auto-generated method stub
 		
