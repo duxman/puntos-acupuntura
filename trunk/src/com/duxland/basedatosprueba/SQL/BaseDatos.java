@@ -1,9 +1,13 @@
 package com.duxland.basedatosprueba.SQL;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+
+import android.R.bool;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,16 +32,78 @@ public class BaseDatos extends SQLiteOpenHelper
 		DB_NAME=DatabaseName;
     	this.context = c;    	     	              
     }
+	private String getMD5Checksum(String filename) throws Exception 
+	{
+	       byte[] b = createChecksum(filename);
+	       String result = "";
+
+	       for (int i=0; i < b.length; i++) {
+	           result += Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+	       }
+	       return result;
+	}
+	private String getMD5Checksum(InputStream fis) throws Exception 
+	{
+	       byte[] b = createChecksum(fis);
+	       String result = "";
+
+	       for (int i=0; i < b.length; i++) {
+	           result += Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+	       }
+	       return result;
+	}
+	private byte[] createChecksum(String filename) throws Exception {
+	       InputStream fis =  new FileInputStream(filename);
+
+	       byte[] buffer = new byte[1024];
+	       MessageDigest complete = MessageDigest.getInstance("MD5");
+	       int numRead;
+
+	       do {
+	           numRead = fis.read(buffer);
+	           if (numRead > 0) {
+	               complete.update(buffer, 0, numRead);
+	           }
+	       } while (numRead != -1);
+
+	       fis.close();
+	       return complete.digest();
+	   }
+	private byte[] createChecksum(InputStream fis) throws Exception 
+	{	       
+	       byte[] buffer = new byte[1024];
+	       MessageDigest complete = MessageDigest.getInstance("MD5");
+	       int numRead;
+
+	       do {
+	           numRead = fis.read(buffer);
+	           if (numRead > 0) {
+	               complete.update(buffer, 0, numRead);
+	           }
+	       } while (numRead != -1);
+
+	       fis.close();
+	       return complete.digest();
+	   }
+
+	private Boolean CompararMD5()
+	{
+		Boolean rtn=false;
+		
+		
+		return rtn;
+		
+	}
 	/**
-	* Crea una base de datos vacía en el sistema y la reescribe con nuestro fichero de base de datos.
+	* Crea una base de datos vacï¿½a en el sistema y la reescribe con nuestro fichero de base de datos.
 	* */
 	public void createDataBase() throws IOException
 	{	 
-		boolean dbExist = checkDataBase();	 
+		boolean dbExist = checkDataBase();				
 		if(!dbExist)		
 		{
-			//Llamando a este método se crea la base de datos vacía en la ruta por defecto del sistema
-			//de nuestra aplicación por lo que podremos sobreescribirla con nuestra base de datos.
+			//Llamando a este mï¿½todo se crea la base de datos vacï¿½a en la ruta por defecto del sistema
+			//de nuestra aplicaciï¿½n por lo que podremos sobreescribirla con nuestra base de datos.
 			this.getReadableDatabase();	 
 			try 
 			{	 
@@ -51,32 +117,44 @@ public class BaseDatos extends SQLiteOpenHelper
 		}	 
 	}
 	/**
-	* Comprueba si la base de datos existe para evitar copiar siempre el fichero cada vez que se abra la aplicación.
+	* Comprueba si la base de datos existe para evitar copiar siempre el fichero cada vez que se abra la aplicaciï¿½n.
 	* @return true si existe, false si no existe
 	*/
 	private boolean checkDataBase()
 	{
 		SQLiteDatabase checkDB = null;
+		boolean rtn=false;
+		String MD5_2="";
+		String MD5_1="";
 	 
 		try
 		{		
 			String myPath = DB_PATH + DB_NAME;
-			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);		 
+			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+			
+			InputStream myInput = context.getAssets().open(DB_NAME);
+			MD5_1=getMD5Checksum(myInput);
+			MD5_2=getMD5Checksum(myPath);
+						
 		}
-		catch(SQLiteException e)
-		{		 			
-			//si llegamos aqui es porque la base de datos no existe todavía.
-			Log.i(DB_NAME, "La base de datos no existe todavía " + e);
+		catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			Log.i(DB_NAME, "La base de datos no existe todavï¿½a " + e);
 		}
 		if(checkDB != null)
 		{		 
-			checkDB.close();		 
+			checkDB.close();
+			if(MD5_1==MD5_2)
+				rtn=true;
+			else
+				rtn=false;				
 		}
-		return checkDB != null ? true : false;
+		return rtn;
 	}
 	/**
-	* Copia nuestra base de datos desde la carpeta assets a la recién creada
-	* base de datos en la carpeta de sistema, desde dónde podremos acceder a ella.
+	* Copia nuestra base de datos desde la carpeta assets a la reciï¿½n creada
+	* base de datos en la carpeta de sistema, desde dï¿½nde podremos acceder a ella.
 	* Esto se hace con bytestream.
 	* */
 	private void copyDataBase() throws IOException
@@ -85,8 +163,8 @@ public class BaseDatos extends SQLiteOpenHelper
 		try 
 		{				
 			//Abrimos el fichero de base de datos como entrada
-			InputStream myInput = context.getAssets().open(DB_NAME);	 
-			//Ruta a la base de datos vacía recién creada
+			InputStream myInput = context.getAssets().open(DB_NAME);	 			
+			//Ruta a la base de datos vacï¿½a reciï¿½n creada
 			String outFileName = DB_PATH + DB_NAME;
 			File folder = new File(DB_PATH);
 			boolean success = false;
@@ -102,7 +180,7 @@ public class BaseDatos extends SQLiteOpenHelper
 			
 			
 			
-			//Abrimos la base de datos vacía como salida
+			//Abrimos la base de datos vacï¿½a como salida
 			
 			FileOutputStream myOutput = new FileOutputStream(outFileName);
 		 
@@ -144,7 +222,7 @@ public class BaseDatos extends SQLiteOpenHelper
 		}
 		catch(SQLiteException e)
 		{		 			
-			//si llegamos aqui es porque la base de datos no existe todavía.
+			//si llegamos aqui es porque la base de datos no existe todavï¿½a.
 			Log.i(DB_NAME, "Error abriendo la base de datos " + e);
 		}				
 	}
