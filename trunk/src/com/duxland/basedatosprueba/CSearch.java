@@ -5,12 +5,15 @@ import com.duxland.basedatosprueba.SQL.CDatos;
 import com.duxland.basedatosprueba.SQL.CListDatos;
 import com.duxland.basedatosprueba.SQL.CSQL;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class CSearch extends Activity implements OnClickListener 
+public class CSearch extends ListActivity implements OnClickListener,OnItemClickListener 
 {
 	GlobalClass global;
 	Button btnSearch;
@@ -28,10 +31,13 @@ public class CSearch extends Activity implements OnClickListener
 	Boolean ObjSearch=false;
 	ArrayList<String> CamposSearch;
 	String CampoMostrar;
+	CListDatos datositems;
+	CSQL DatosSQL;
 	public void CreaInterfaz()
 	{  
 		CamposSearch=new ArrayList<String>();		
 		listView = (ListView) findViewById(R.id.listsearch);
+		listView.setOnItemClickListener(this);
 		btnSearch=(Button) findViewById(R.id.BtnSearch);
 		btnSearch.setOnClickListener(this);
 		textSearch=(EditText)findViewById(R.id.EditSearch);
@@ -42,6 +48,8 @@ public class CSearch extends Activity implements OnClickListener
     {       
     	super.onCreate(savedInstanceState);
 	    global=GlobalClass.getInstance();
+	    datositems=new CListDatos();
+	    DatosSQL= new CSQL(global.getBaseDatos(),TablaUsada);
 	    setContentView(R.layout.searchlay);
 	    TablaUsada="Diagnosticos";
 	    ObjSearch=false;	    
@@ -71,12 +79,14 @@ public class CSearch extends Activity implements OnClickListener
     		TablaUsada="Diagnosticos";
     		CamposSearch.clear();
     		ObjSearch=false;
+    		datositems.clear();
     	}    	
     	else if(item.getItemId()==R.id.spuntos)
     	{
     		TablaUsada="Puntos";
     		CamposSearch.clear();
     		ObjSearch=false;
+    		datositems.clear();
     	}
     	Rellenar("");    	
     	return false;
@@ -85,8 +95,7 @@ public class CSearch extends Activity implements OnClickListener
     public ArrayList<String> RellenarObjSearch()
     {
     	ArrayList<String> rtn=new ArrayList<String>();
-    	CSQL objetos = new CSQL(global.getBaseDatos(),"Objetos");    	
-    	
+    	CSQL objetos = new CSQL(global.getBaseDatos(),"Objetos");    	    	
     	CListDatos dobj=new CListDatos();
     	
     	String _idPadre=objetos.getList("Nombre='"+TablaUsada+"'").get(0).getValorCampo("_id");    	
@@ -104,16 +113,16 @@ public class CSearch extends Activity implements OnClickListener
     }
     public void Rellenar(String Filtro)
     {
-    	String where="";
-    	CSQL Datos = new CSQL(global.getBaseDatos(),TablaUsada);
+    	String where="";    	
     	ArrayList<String> tmp=new ArrayList<String>();
     	if(!ObjSearch)
     	{    		
     		CamposSearch=RellenarObjSearch();
     	}
     	if(Filtro!="")
-    		where=GeneraWhere(Filtro);    	    	
-    	tmp=Datos.getArrayDatos(CampoMostrar,where);
+    		where=GeneraWhere(Filtro);    
+    	datositems=DatosSQL.getList(where);
+    	tmp=DatosSQL.getArrayDatos(CampoMostrar,datositems);
     	if(tmp.size()>0)
     	{
 	    	String[] array=new String[tmp.size()];
@@ -125,7 +134,7 @@ public class CSearch extends Activity implements OnClickListener
     	}
     	else
     	{
-    		Toast toast1 = Toast.makeText(getApplicationContext(),"No se ha encontrado ningun resultado", Toast.LENGTH_SHORT);
+    		Toast toast1 = Toast.makeText(this,"No se ha encontrado ningun resultado", Toast.LENGTH_LONG);
     	    toast1.show();	
     	}
     }
@@ -158,5 +167,11 @@ public class CSearch extends Activity implements OnClickListener
 		}
 		// TODO Auto-generated method stub
 		
+	}
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+	{
+		// TODO Auto-generated method stub
+		CDatos dat=datositems.get(position);
+						
 	}	
 }

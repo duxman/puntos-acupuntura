@@ -6,14 +6,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 public class CSQL 
 {
 	public static final String KEY_ID = "_id";
 	public String NOM_TABLA ="";	
 	
-	//Array de strings para su uso en los diferentes métodos
+	//Array de strings para su uso en los diferentes mï¿½todos
 	
 	private List<CDatos> Datos ;	
 	private String[] cols; 
@@ -118,16 +117,20 @@ public class CSQL
 		}
 		return rtn;
 	}
+	public ArrayList<String> getArrayDatos(String columna,CListDatos datos)
+	{
+		ArrayList<String> rtn=new ArrayList<String>();		
+		for(CDatos d:datos)
+		{		
+			rtn.add(d.getValorCampo(columna));			
+		}		
+		return rtn; 	
+	}
 	public ArrayList<String> getArrayDatos(String columna,String Where)
 	{
 		CListDatos tmp = new CListDatos();			
 		tmp=getList(Where);
-		ArrayList<String> rtn=new ArrayList<String>();		
-		for(CDatos d:tmp)
-		{		
-			rtn.add(d.getValorCampo(columna));			
-		}		
-		return rtn;
+		return getArrayDatos(columna,tmp);		
 	}
 
 	public String[] getCols() 
