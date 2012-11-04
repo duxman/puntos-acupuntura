@@ -3,9 +3,11 @@ package com.duxland.basedatosprueba;
 import java.util.ArrayList;
 import com.duxland.basedatosprueba.SQL.CDatos;
 import com.duxland.basedatosprueba.SQL.CListDatos;
+import com.duxland.basedatosprueba.SQL.CObjeto;
 import com.duxland.basedatosprueba.SQL.CSQL;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +30,7 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
 	EditText textSearch;
 	ListView listView;
 	String TablaUsada;
+	CObjeto ObjetoDatos;
 	Boolean ObjSearch=false;
 	ArrayList<String> CamposSearch;
 	String CampoMostrar;
@@ -61,7 +64,15 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
     	MenuInflater inflater = getMenuInflater();
     	//generates a Menu from a menu resource file
     	//R.menu.main_menu represents the ID of the XML resource file
+    	
     	inflater.inflate(R.menu.searchmenu, menu);
+    	
+    	for(int i=0; i<global.getListaObjetos().size();i++)
+    	{
+    		
+    		menu.add(Menu.NONE,i,Menu.NONE,global.getListaObjetos().keys().nextElement()+"Dinamico");
+    	}
+    	
     	return true;
     }
     @Override public boolean onOptionsItemSelected(MenuItem item)
@@ -92,24 +103,13 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
     	return false;
     }	
     
-    public ArrayList<String> RellenarObjSearch()
+    public void RellenarObjSearch()
     {
-    	ArrayList<String> rtn=new ArrayList<String>();
-    	CSQL objetos = new CSQL(global.getBaseDatos(),"Objetos");    	    	
-    	CListDatos dobj=new CListDatos();
-    	
-    	String _idPadre=objetos.getList("Nombre='"+TablaUsada+"'").get(0).getValorCampo("_id");    	
-    	dobj=objetos.getList(" Padre="+_idPadre);
-    	for(CDatos d:dobj)
-    	{
-    		if(d.getValorCampo("TipoObj").equals("CS"))
-    			rtn.add(d.getValorCampo("Nombre"));
-    		if(d.getValorCampo("Mostrar").equals("S"))
-    			CampoMostrar=d.getValorCampo("Nombre");
-    	}    	
-    	if(rtn.size()>0)
-    		ObjSearch=true;
-    	return rtn;    	    	    	   
+    	ObjetoDatos=global.getListaObjetos().get(TablaUsada);
+    	CamposSearch=ObjetoDatos.getCamposSearch();
+    	CampoMostrar=ObjetoDatos.getCamposShow().get(0);
+    	if(CamposSearch.size()>0)    	    	      
+    		ObjSearch=true;    	   	  
     }
     public void Rellenar(String Filtro)
     {
@@ -117,7 +117,7 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
     	ArrayList<String> tmp=new ArrayList<String>();
     	if(!ObjSearch)
     	{    		
-    		CamposSearch=RellenarObjSearch();
+    		RellenarObjSearch();
     	}
     	if(Filtro!="")
     		where=GeneraWhere(Filtro);    
@@ -172,6 +172,8 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
 	{
 		// TODO Auto-generated method stub
 		CDatos dat=datositems.get(position);
+		Intent intent = new Intent(this, CResult.class);
+	    startActivity(intent);
 						
 	}	
 }
