@@ -10,7 +10,7 @@ import android.util.Log;
 public class CSQL 
 {
 	public static final String KEY_ID = "_id";
-	public String NOM_TABLA ="";	
+	private String NOM_TABLA ="";	
 	
 	//Array de strings para su uso en los diferentes m�todos
 	
@@ -21,7 +21,7 @@ public class CSQL
 	public CSQL(SQLiteDatabase BaseDatos,String nomtabla)
 	{	
 		super();
-		NOM_TABLA=nomtabla;		
+		setNOM_TABLA(nomtabla);		
 		db=BaseDatos;			
 		setCols(GetColums());			
 	}
@@ -32,7 +32,7 @@ public class CSQL
 		for(int i=0;i<datos.size();i++)
 			newValues.put(datos.getNombreCampo(i), datos.getValorCampo(i));
 		
-		return db.insert(NOM_TABLA, null, newValues);
+		return db.insert(getNOM_TABLA(), null, newValues);
 	}	
 		 
 	/**
@@ -40,7 +40,7 @@ public class CSQL
 	* */
 	public boolean Remove(long _rowIndex) 
 	{
-		return db.delete(NOM_TABLA, "_id =" + _rowIndex, null) > 0;
+		return db.delete(getNOM_TABLA(), "_id =" + _rowIndex, null) > 0;
 	}	 
 	/**
 	* ACTUALIZAR ALARMA _id = _rowIndex
@@ -50,11 +50,11 @@ public class CSQL
 		ContentValues newValues = new ContentValues();
 		for(int i=0;i<datos.size();i++)
 			newValues.put(datos.getNombreCampo(i), datos.getValorCampo(i));
-		return db.update(NOM_TABLA, newValues,"_id =" + _rowIndex, null) > 0;
+		return db.update(getNOM_TABLA(), newValues,"_id =" + _rowIndex, null) > 0;
 	}
 	private String[] GetColums()
 	{	
-		String Sql="SELECT *  FROM " + NOM_TABLA +" LIMIT 1";
+		String Sql="SELECT *  FROM " + getNOM_TABLA() +" LIMIT 1";
 		Cursor result=db.rawQuery(Sql, null);
 		return result.getColumnNames();	
 	}
@@ -62,11 +62,11 @@ public class CSQL
 	public CListDatos getFila(long _rowIndex) 
 	{
 		CListDatos rtn = new CListDatos();
-		String Sql="SELECT *  FROM " + NOM_TABLA +" WHERE " + KEY_ID +" = " +_rowIndex;
+		String Sql="SELECT *  FROM " + getNOM_TABLA() +" WHERE " + KEY_ID +" = " +_rowIndex;
 		Cursor result=db.rawQuery(Sql, null);
 		if ((result.getCount() == 0) || !result.moveToFirst()) 
 		{
-			Log.e(NOM_TABLA,"Tabla Vacia");		 
+			Log.e(getNOM_TABLA(),"Tabla Vacia");		 
 		} 
 		else 
 		{
@@ -91,14 +91,14 @@ public class CSQL
 		CListDatos rtn = new CListDatos();
 		String Sql;
 		if(Where!="")
-			Sql="SELECT *  FROM " + NOM_TABLA +" WHERE " + Where;
+			Sql="SELECT *  FROM " + getNOM_TABLA() +" WHERE " + Where;
 		else
-			Sql="SELECT *  FROM " + NOM_TABLA;
+			Sql="SELECT *  FROM " + getNOM_TABLA();
 			
 		Cursor result=db.rawQuery(Sql, null);
 		if ((result.getCount() == 0) || !result.moveToFirst()) 
 		{
-			Log.e(NOM_TABLA,"Tabla Vacia");		 
+			Log.e(getNOM_TABLA(),"Tabla Vacia");		 
 		} 
 		else 
 		{
@@ -148,5 +148,13 @@ public class CSQL
 
 	public void setDatos(List<CDatos> datos) {
 		Datos = datos;
+	}
+
+	public String getNOM_TABLA() {
+		return NOM_TABLA;
+	}
+
+	public void setNOM_TABLA(String nOM_TABLA) {
+		NOM_TABLA = nOM_TABLA;
 	}		 	
 }

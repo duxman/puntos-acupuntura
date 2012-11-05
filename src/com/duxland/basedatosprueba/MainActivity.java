@@ -29,9 +29,9 @@ public class MainActivity extends TabActivity
         
         Resources res=getResources();  	  	                                             
         intent=new Intent().setClass(this, CSearch.class);
-        spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);
-        
+        spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);       
         tb.addTab(spectb);
+        
         intent=new Intent().setClass(this, cabout.class);
         spectb=tb.newTabSpec("About" ).setIndicator("",res.getDrawable(R.drawable.sabout)).setContent(intent);
         tb.addTab(spectb);    	

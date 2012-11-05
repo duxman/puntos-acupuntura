@@ -1,11 +1,14 @@
 package com.duxland.basedatosprueba;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.duxland.basedatosprueba.SQL.CDatos;
 import com.duxland.basedatosprueba.SQL.CListDatos;
 import com.duxland.basedatosprueba.SQL.CObjeto;
 import com.duxland.basedatosprueba.SQL.CSQL;
 import android.app.Activity;
+import android.app.Application;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,22 +26,25 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class CSearch extends ListActivity implements OnClickListener,OnItemClickListener 
+public class CSearch extends Activity implements OnClickListener,OnItemClickListener 
 {
+	static final int MENUDINAMIC=19900;
 	GlobalClass global;
 	Button btnSearch;
 	EditText textSearch;
 	ListView listView;
 	String TablaUsada;
+	List<String> ListaTablas;
 	CObjeto ObjetoDatos;
 	Boolean ObjSearch=false;
-	ArrayList<String> CamposSearch;
+	List<String> CamposSearch;
 	String CampoMostrar;
 	CListDatos datositems;
 	CSQL DatosSQL;
 	public void CreaInterfaz()
 	{  
-		CamposSearch=new ArrayList<String>();		
+		CamposSearch=new ArrayList<String>();	
+		ListaTablas=new ArrayList<String>();
 		listView = (ListView) findViewById(R.id.listsearch);
 		listView.setOnItemClickListener(this);
 		btnSearch=(Button) findViewById(R.id.BtnSearch);
@@ -50,56 +56,55 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
     @Override public void onCreate(Bundle savedInstanceState) 
     {       
     	super.onCreate(savedInstanceState);
+    	setContentView(R.layout.searchlay);
+    	TablaUsada="Diagnosticos";
 	    global=GlobalClass.getInstance();
 	    datositems=new CListDatos();
 	    DatosSQL= new CSQL(global.getBaseDatos(),TablaUsada);
-	    setContentView(R.layout.searchlay);
-	    TablaUsada="Diagnosticos";
+	    
+	    
 	    ObjSearch=false;	    
 	    CampoMostrar="";
 	    CreaInterfaz();    	                              
     }
     @Override public boolean onCreateOptionsMenu(Menu menu)
     {
-    	MenuInflater inflater = getMenuInflater();
+    	
     	//generates a Menu from a menu resource file
     	//R.menu.main_menu represents the ID of the XML resource file
     	
-    	inflater.inflate(R.menu.searchmenu, menu);
     	
-    	for(int i=0; i<global.getListaObjetos().size();i++)
-    	{
-    		
-    		menu.add(Menu.NONE,i,Menu.NONE,global.getListaObjetos().keys().nextElement()+"Dinamico");
+    	int i=MENUDINAMIC;
+    	for(String s:global.getListaObjetos().keySet())
+    	{    		
+    		menu.add(Menu.NONE,i,Menu.NONE,s);
+    		ListaTablas.add(s);
+    		i++;
     	}
-    	
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.searchmenu, menu);
     	return true;
     }
     @Override public boolean onOptionsItemSelected(MenuItem item)
     { 	
     	//check selected menu item
-    	// R.id.exit is @+id/exit
+    	// R.id.exit is @+id/exit    	
     	if(item.getItemId() == R.id.exit)
     	{
     		//close the Activity
     		this.finish();
     		return true;
     	}
-    	else if(item.getItemId()==R.id.sdiagnosticos)
+    	else 
     	{
-    		TablaUsada="Diagnosticos";
+    		int id=item.getItemId()-MENUDINAMIC;    		
+    		TablaUsada=ListaTablas.get(id);
+    		DatosSQL.setNOM_TABLA(TablaUsada);
     		CamposSearch.clear();
-    		ObjSearch=false;
+    		RellenarObjSearch();
     		datositems.clear();
-    	}    	
-    	else if(item.getItemId()==R.id.spuntos)
-    	{
-    		TablaUsada="Puntos";
-    		CamposSearch.clear();
-    		ObjSearch=false;
-    		datositems.clear();
-    	}
-    	Rellenar("");    	
+    		Rellenar("");
+    	}    	    	    	    	
     	return false;
     }	
     
@@ -120,7 +125,7 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
     		RellenarObjSearch();
     	}
     	if(Filtro!="")
-    		where=GeneraWhere(Filtro);    
+    		where=GeneraWhere(Filtro);       	
     	datositems=DatosSQL.getList(where);
     	tmp=DatosSQL.getArrayDatos(CampoMostrar,datositems);
     	if(tmp.size()>0)
@@ -170,10 +175,9 @@ public class CSearch extends ListActivity implements OnClickListener,OnItemClick
 	}
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 	{
-		// TODO Auto-generated method stub
-		CDatos dat=datositems.get(position);
-		Intent intent = new Intent(this, CResult.class);
-	    startActivity(intent);
-						
+		Intent intent = new Intent(global.getContext(), CResult.class);
+		intent.putExtra("Tabla", TablaUsada);
+		intent.putExtra("Id", datositems.get(position).getValorCampo("_id"));
+	    startActivity(intent);						
 	}	
 }
