@@ -8,11 +8,11 @@ import android.widget.EditText;
 import android.widget.TabHost;
 
 public class CResult extends TabActivity 
-{
-	EditText cajaTexto;  
+{	  
 	GlobalClass global;
 	TabHost tb;
 	TabHost.TabSpec spectb;
+	
 	public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
@@ -22,17 +22,13 @@ public class CResult extends TabActivity
     }
     private void CrearInterfaz()
     {
-        tb=getTabHost();
+    	tb=getTabHost();
         Intent intent;
         
         Resources res=getResources();  	  	                                             
-        intent=new Intent().setClass(this, CSearch.class);
-        spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);
-        
-        tb.addTab(spectb);
-        intent=new Intent().setClass(this, cabout.class);
-        spectb=tb.newTabSpec("About" ).setIndicator("",res.getDrawable(R.drawable.sabout)).setContent(intent);
-        tb.addTab(spectb);    	
+        intent=new Intent().setClass(this, CHtmlViewer.class);
+        spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);       
+        tb.addTab(spectb);                    
     }
 
 }

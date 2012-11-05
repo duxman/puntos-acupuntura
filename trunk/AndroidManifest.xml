@@ -21,6 +21,8 @@
         </activity>
         <activity android:name="cabout"></activity>
         <activity android:name="CSearch"></activity>
+        <activity android:name="CHtmlViewer"></activity>
+        <activity android:name="CResult"></activity>
         
     </application>
 
