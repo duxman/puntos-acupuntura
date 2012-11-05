@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 
-import android.R.bool;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -85,15 +84,6 @@ public class BaseDatos extends SQLiteOpenHelper
 	       fis.close();
 	       return complete.digest();
 	   }
-
-	private Boolean CompararMD5()
-	{
-		Boolean rtn=false;
-		
-		
-		return rtn;
-		
-	}
 	/**
 	* Crea una base de datos vac�a en el sistema y la reescribe con nuestro fichero de base de datos.
 	* */

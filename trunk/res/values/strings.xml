@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Guia Medicina China</string>
-    <string name="bd_name">AcupunturaDB.db</string>
+    <string name="bd_name">DB.db</string>
     <string name="aboutoption">about</string>
     <string name="exitoption">Salir</string>
     <string name="app_dir">GuiaAcupuntura</string>

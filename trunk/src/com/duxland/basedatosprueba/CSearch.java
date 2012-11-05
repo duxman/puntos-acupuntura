@@ -3,13 +3,8 @@ package com.duxland.basedatosprueba;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.duxland.basedatosprueba.SQL.CDatos;
-import com.duxland.basedatosprueba.SQL.CListDatos;
-import com.duxland.basedatosprueba.SQL.CObjeto;
-import com.duxland.basedatosprueba.SQL.CSQL;
+import com.duxland.basedatosprueba.SQL.*;
 import android.app.Activity;
-import android.app.Application;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
