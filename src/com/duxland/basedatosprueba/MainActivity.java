@@ -25,8 +25,7 @@ public class MainActivity extends TabActivity
     private void CrearInterfaz()
     {
         tb=getTabHost();
-        Intent intent;
-        
+        Intent intent;        
         Resources res=getResources();  	  	                                             
         intent=new Intent().setClass(this, CSearch.class);
         spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);       

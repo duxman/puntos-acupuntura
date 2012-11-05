@@ -5,7 +5,7 @@ import android.util.Log;
 public class CDatos 
 {
 	private ArrayList<String> m_Claves;
-	private ArrayList<String> m_Valores;
+	public ArrayList<String> m_Valores;
 	
 	public CDatos()
 	{	
