@@ -107,7 +107,7 @@ public class CSearch extends Activity implements OnClickListener,OnItemClickList
     {
     	ObjetoDatos=global.getListaObjetos().get(TablaUsada);
     	CamposSearch=ObjetoDatos.getCamposSearch();
-    	CampoMostrar=ObjetoDatos.getCamposShow().get(0);
+    	CampoMostrar=ObjetoDatos.getCampoLista();
     	if(CamposSearch.size()>0)    	    	      
     		ObjSearch=true;    	   	  
     }
