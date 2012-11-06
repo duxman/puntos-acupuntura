@@ -60,19 +60,24 @@ public  class GlobalClass
 	{
 		CSQL objetos = new CSQL(getBaseDatos(),"Objetos");
 		CListDatos objTabla=new CListDatos();
-		objTabla=objetos.getList("TipoObj='T'");
+		objTabla=objetos.getList("TipoObj='T'");		
 		for(CDatos d:objTabla)
 		{			
 			CObjeto tmp= new CObjeto(d.getValorCampo("Nombre"));
+			
+			tmp.addCampoTitulo(d.getValorCampo("CamposTitulo"));
+			tmp.addCampoDescripcion(d.getValorCampo("CamposDescripcion"));
+			
 			CListDatos objCampo=new CListDatos();
 			objCampo=objetos.getList("Padre="+d.getValorCampo("_id"));
+			
 			for(CDatos d1:objCampo)
 			{
 				String Nomtmp=d1.getValorCampo("Nombre");
 				String Tipotmp=d1.getValorCampo("TipoObj");
 				String VerTmp=d1.getValorCampo("Mostrar");				
 				
-				tmp.addCampo(Nomtmp, Tipotmp, VerTmp);
+				tmp.addCampo(Nomtmp, Tipotmp, VerTmp);				
 			}					
 			getListaObjetos().put(tmp.getNombreTabla(), tmp);
 		}
