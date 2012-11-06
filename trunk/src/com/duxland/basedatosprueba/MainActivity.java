@@ -27,8 +27,8 @@ public class MainActivity extends TabActivity
         tb=getTabHost();
         Intent intent;        
         Resources res=getResources();  	  	                                             
-        intent=new Intent().setClass(this, CSearch.class);
-        spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);       
+        intent=new Intent().setClass(this, CListaBases.class);
+        spectb=tb.newTabSpec("BasesDatos").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);       
         tb.addTab(spectb);
         
         intent=new Intent().setClass(this, cabout.class);

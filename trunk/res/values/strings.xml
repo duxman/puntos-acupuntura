@@ -1,16 +1,14 @@
 <resources>
 
-    <string name="app_name">Guia Medicina China</string>
-    <string name="bd_name">DB.db</string>
+    <string name="app_name">Base Conocimientos</string>
+    <string name="bd_name">MainDB.sqlite</string>
     <string name="aboutoption">about</string>
     <string name="exitoption">Salir</string>
-    <string name="app_dir">GuiaAcupuntura</string>
-    <string name="diagnosticooption">Diagnosticos</string>
-    <string name="puntosoption">Puntos</string>
-    <string name="meridianooption">Meridianos</string>
+    <string name="app_dir">BasesConocimientos</string>
     <string name="title_activity_main">Guia medicina  china</string>
     <string name="abouttext1">Acerca de ...</string>
     <string name="abouttext2">Diseñado y Realizado</string>
     <string name="abouttext3">By</string>
     <string name="abouttext4">Duxman &amp; Bubu</string>
+    <string name="refreshoption">Actualizar</string>
 </resources>

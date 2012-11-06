@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 public  class GlobalClass
 {
 	private BaseDatos base;
+	private BaseDatos baseConsulta;
 	private String miAplicacion;
 	private String miDB;
 	private Hashtable< String , CObjeto>ListaObjetos;
@@ -40,7 +41,10 @@ public  class GlobalClass
 	{
 		this.base = base;
 	}
-
+	private void setBaseConsulta(String StrBase) 
+	{
+		this.baseConsulta = new BaseDatos(getContext(),miAplicacion,StrBase);
+	}
 	public Context getContext() 
 	{
 		return c;
@@ -51,10 +55,10 @@ public  class GlobalClass
 		c = con;
 		miAplicacion=c.getString(R.string.app_dir); 		
         miDB=c.getString(R.string.bd_name);
-        setBase(new BaseDatos(c,miAplicacion,miDB)); //creamos el objeto de tipo BaseDatos
+        setBase(new BaseDatos(c,miAplicacion,miDB)); //creamos el objeto de tipo BaseDatos        
         base.open();
-        ListaObjetos=new Hashtable<String, CObjeto>(); 
-        CargarObjetos();
+        //ListaObjetos=new Hashtable<String, CObjeto>(); 
+        //CargarObjetos();
 	}
 	private void CargarObjetos()
 	{
