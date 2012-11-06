@@ -31,12 +31,14 @@ public final class R {
         public static final int ssearch=0x7f02000a;
     }
     public static final class id {
-        public static final int BtnSearch=0x7f08000a;
-        public static final int EditSearch=0x7f080009;
+        public static final int BtnSearch=0x7f08000b;
+        public static final int EditSearch=0x7f08000a;
         public static final int VisorHTML=0x7f080007;
-        public static final int exit=0x7f08000c;
-        public static final int linearLayout1=0x7f080008;
-        public static final int listsearch=0x7f08000b;
+        public static final int exit=0x7f08000e;
+        public static final int linearLayout1=0x7f080009;
+        public static final int listBases=0x7f080008;
+        public static final int listsearch=0x7f08000c;
+        public static final int refresh=0x7f08000d;
         public static final int tab1=0x7f080004;
         public static final int tab2=0x7f080005;
         public static final int tab3=0x7f080006;
@@ -49,26 +51,26 @@ public final class R {
         public static final int about_lay=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int htmlviewer_lay=0x7f030002;
-        public static final int resultview_lay=0x7f030003;
-        public static final int searchlay=0x7f030004;
+        public static final int listabases_lay=0x7f030003;
+        public static final int resultview_lay=0x7f030004;
+        public static final int searchlay=0x7f030005;
+        public static final int searchmain_lay=0x7f030006;
     }
     public static final class menu {
         public static final int searchmenu=0x7f070000;
     }
     public static final class string {
         public static final int aboutoption=0x7f050002;
-        public static final int abouttext1=0x7f050009;
-        public static final int abouttext2=0x7f05000a;
-        public static final int abouttext3=0x7f05000b;
-        public static final int abouttext4=0x7f05000c;
+        public static final int abouttext1=0x7f050006;
+        public static final int abouttext2=0x7f050007;
+        public static final int abouttext3=0x7f050008;
+        public static final int abouttext4=0x7f050009;
         public static final int app_dir=0x7f050004;
         public static final int app_name=0x7f050000;
         public static final int bd_name=0x7f050001;
-        public static final int diagnosticooption=0x7f050005;
         public static final int exitoption=0x7f050003;
-        public static final int meridianooption=0x7f050007;
-        public static final int puntosoption=0x7f050006;
-        public static final int title_activity_main=0x7f050008;
+        public static final int refreshoption=0x7f05000a;
+        public static final int title_activity_main=0x7f050005;
     }
     public static final class style {
         public static final int AppTheme=0x7f060000;
