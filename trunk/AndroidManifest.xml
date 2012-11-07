@@ -25,6 +25,7 @@
         <activity android:name="CHtmlViewer"></activity>
         <activity android:name="CResult"></activity>
         <activity android:name="CListaBases"></activity>
+        <activity android:name="CSearchMain"></activity>
         
     </application>
 

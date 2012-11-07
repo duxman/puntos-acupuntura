@@ -31,6 +31,10 @@ public class BaseDatos extends SQLiteOpenHelper
 		DB_NAME=DatabaseName;
     	this.context = c;    	     	              
     }
+	public SQLiteDatabase getBase()
+	{
+		return database;
+	}
 	private String getMD5Checksum(String filename) throws Exception 
 	{
 	       byte[] b = createChecksum(filename);
