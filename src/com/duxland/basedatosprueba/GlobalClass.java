@@ -5,9 +5,7 @@ import com.duxland.basedatosprueba.SQL.CDatos;
 import com.duxland.basedatosprueba.SQL.CListDatos;
 import com.duxland.basedatosprueba.SQL.CObjeto;
 import com.duxland.basedatosprueba.SQL.CSQL;
-
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
 public  class GlobalClass
 {
@@ -33,17 +31,21 @@ public  class GlobalClass
 	{			
 	}
 	
-	public SQLiteDatabase getBaseDatos() 
+	public BaseDatos getBaseDatos() 
 	{
-		return base.database;
+		return base;
 	}	
 	private void setBase(BaseDatos base) 
 	{
 		this.base = base;
 	}
-	private void setBaseConsulta(String StrBase) 
+	public void setBaseConsulta(String StrBase) 
 	{
-		this.baseConsulta = new BaseDatos(getContext(),miAplicacion,StrBase);
+		this.baseConsulta = new BaseDatos(getContext(),miAplicacion,StrBase);		
+	}
+	public BaseDatos getBaseConsulta() 
+	{
+		return baseConsulta;
 	}
 	public Context getContext() 
 	{
@@ -55,14 +57,14 @@ public  class GlobalClass
 		c = con;
 		miAplicacion=c.getString(R.string.app_dir); 		
         miDB=c.getString(R.string.bd_name);
-        setBase(new BaseDatos(c,miAplicacion,miDB)); //creamos el objeto de tipo BaseDatos        
-        base.open();
+        setBase(new BaseDatos(c,miAplicacion,miDB)); //creamos el objeto de tipo BaseDatos                
         //ListaObjetos=new Hashtable<String, CObjeto>(); 
         //CargarObjetos();
 	}
+	@SuppressWarnings("unused")
 	private void CargarObjetos()
 	{
-		CSQL objetos = new CSQL(getBaseDatos(),"Objetos");
+		CSQL objetos = new CSQL(getBaseDatos().getBase(),"Objetos");
 		CListDatos objTabla=new CListDatos();
 		objTabla=objetos.getList("TipoObj='T'");		
 		for(CDatos d:objTabla)

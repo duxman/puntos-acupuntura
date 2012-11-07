@@ -22,33 +22,39 @@ public class CListaBases extends Activity implements OnItemClickListener
 {
 	GlobalClass global;
 	CSQL DatosSQL;
+	ListView listview;
+	CListDatos datositems;
 	
 	@Override public void onCreate(Bundle savedInstanceState) 
     {       
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.listabases_lay);    	
 	    global=GlobalClass.getInstance();
-	    DatosSQL= new CSQL(global.getBaseDatos(),"bases");
+	    
+	    listview=(ListView)findViewById(id.listBases);
+	    listview.setOnItemClickListener(this);
 	    CargarDatos();
     }
 	private void CargarDatos()
-	{
+	{				
+		global.getBaseDatos().open();
+		DatosSQL= new CSQL(global.getBaseDatos().getBase(),"bases");
+		datositems=new CListDatos();
+		datositems=DatosSQL.getList("");
+		
 		ArrayList<String> tmp=new ArrayList<String>();
-		
-		
-		CListDatos datositems=DatosSQL.getList("");
-		
     	tmp=DatosSQL.getArrayDatos("nombre",datositems);
+    	
     	if(tmp.size()>0)
     	{
 	    	String[] array=new String[tmp.size()];
 	    	for(int i=0;i<tmp.size();i++)
 	    		array[i]=tmp.get(i);
-	    	
-	    	ListView l=(ListView)findViewById(id.listBases);
+	    		    	
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,array);    
-	    	l.setAdapter(adapter);
+	    	listview.setAdapter(adapter);
     	}	    	
+    	global.getBaseDatos().close();
 	}
 	@Override public boolean onCreateOptionsMenu(Menu menu)
     {    	    
@@ -72,10 +78,15 @@ public class CListaBases extends Activity implements OnItemClickListener
     }	
 	public void onItemClick(AdapterView<?> arg0, View arg1, int posicion, long arg3) 
 	{
-//		Intent intent = new Intent(global.getContext(), CResult.class);
-//		intent.putExtra("Tabla", TablaUsada);
-//		intent.putExtra("Id", datositems.get(position).getValorCampo("_id"));
-//	    startActivity(intent);		
+		String BaseNombretmp=datositems.get(posicion).getValorCampo("nombre");
+		String BaseRutatmp=datositems.get(posicion).getValorCampo("ruta");
+		
+		Intent intent = new Intent(global.getContext(), CSearch.class);			
+		
+		intent.putExtra("BaseNombre", BaseNombretmp);
+		intent.putExtra("BaseRuta", BaseRutatmp);
+
+	    startActivity(intent);		
 		
 	}
 }

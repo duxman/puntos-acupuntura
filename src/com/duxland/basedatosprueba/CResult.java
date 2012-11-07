@@ -11,7 +11,7 @@ public class CResult extends TabActivity
 	GlobalClass global;
 	TabHost tb;
 	TabHost.TabSpec spectb;
-	private String TablaUsada;
+	private String TipoId;
 	private String CampoId;
 	
 	public void onCreate(Bundle savedInstanceState) 
@@ -27,17 +27,15 @@ public class CResult extends TabActivity
         Intent intent;
         
         Bundle bundle=getIntent().getExtras();
-		TablaUsada=bundle.getString("Tabla");
+        TipoId=bundle.getString("TipoId");
 		CampoId=bundle.getString("Id");		
-		
-        Resources res=getResources();
-        
+		        
         intent=new Intent().setClass(this, CHtmlViewer.class);
         
-        intent.putExtra("Tabla", TablaUsada);
+        intent.putExtra("TipoId", TipoId);
 		intent.putExtra("Id", CampoId);
     	
-        spectb=tb.newTabSpec("Buscar").setIndicator("",res.getDrawable(R.drawable.ssearch)).setContent(intent);       
+        spectb=tb.newTabSpec("Buscar").setIndicator(CampoId).setContent(intent);       
         tb.addTab(spectb);                    
     }
 
